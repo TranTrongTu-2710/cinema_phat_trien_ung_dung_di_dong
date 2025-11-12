@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <!-- Hiển thị tên hàng (A, B, C...) -->
+    <TextView
+        android:id="@+id/tv_row_label"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="A" />
+
+    <!-- RecyclerView cho các ghế trong hàng -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_seats_in_row"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="false"
+        tools:itemCount="8" />
+
+</LinearLayout>

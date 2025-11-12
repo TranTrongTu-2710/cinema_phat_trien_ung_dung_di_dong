@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="grey_text">#E3F2FD</color>
+    <color name="unread_notification_bg">#E3F2FD</color>
+    <color name="white">#FFFFFFFF</color>
+    <item name="btn_confirm_change_password" type="id"/>
+    <item name="btn_register" type="id"/>
+    <item name="collapsing_toolbar" type="id"/>
+    <item name="day_item_container" type="id"/>
+    <item name="et_confirm_new_password" type="id"/>
+    <item name="et_current_password" type="id"/>
+    <item name="et_new_password" type="id"/>
+    <item name="et_register_confirm_password" type="id"/>
+    <item name="et_register_email" type="id"/>
+    <item name="et_register_name" type="id"/>
+    <item name="et_register_password" type="id"/>
+    <item name="et_register_phone" type="id"/>
+    <item name="et_register_username" type="id"/>
+    <item name="iv_movie_backdrop" type="id"/>
+    <item name="iv_poster" type="id"/>
+    <item name="iv_seat" type="id"/>
+    <item name="iv_unread_indicator" type="id"/>
+    <item name="recycler_view_days" type="id"/>
+    <item name="recycler_view_showtimes" type="id"/>
+    <item name="register_progress_bar" type="id"/>
+    <item name="toolbar_select_showtime" type="id"/>
+    <item name="tv_day_of_month" type="id"/>
+    <item name="tv_day_of_week" type="id"/>
+    <item name="tv_duration" type="id"/>
+    <item name="tv_genre" type="id"/>
+    <item name="tv_login_now" type="id"/>
+    <item name="tv_movie_description" type="id"/>
+    <item name="tv_movie_genre_duration" type="id"/>
+    <item name="tv_movie_title" type="id"/>
+    <item name="tv_no_showtimes" type="id"/>
+    <item name="tv_notification_content" type="id"/>
+    <item name="tv_notification_timestamp" type="id"/>
+    <item name="tv_notification_title" type="id"/>
+    <item name="tv_register" type="id"/>
+    <item name="tv_seat_label" type="id"/>
+    <item name="tv_title" type="id"/>
+    <string name="app_name">BTL_RapChieuPhim</string>
+    <style name="Base.Theme.DatVe" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+    </style>
+    <style name="Theme.DatVe" parent="Base.Theme.DatVe"/>
+</resources>

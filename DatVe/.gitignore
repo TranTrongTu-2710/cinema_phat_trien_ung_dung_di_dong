@@ -1,0 +1,32 @@
+# ===== Android (app DatVe) =====
+DatVe/.gradle/
+DatVe/.idea/
+DatVe/local.properties
+DatVe/*.iml
+DatVe/build/
+DatVe/app/build/
+DatVe/app/release/
+DatVe/app/debug/
+DatVe/captures/
+*.jks
+*.keystore
+
+# ===== Java / Spring Boot =====
+target/
+*.log
+*.iml
+.idea/
+*.classpath
+*.project
+*.settings/
+
+# ===== Node (nếu có module Node) =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# ===== Hệ điều hành / vặt vãnh =====
+.DS_Store
+Thumbs.db

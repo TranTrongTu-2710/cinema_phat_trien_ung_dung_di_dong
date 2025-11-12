@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_margin="2dp">
+
+    <!-- ImageView để hiển thị trạng thái ghế (trống, đã chọn, đã bán) -->
+    <!-- ID 'iv_seat' khớp với logic trong SeatViewHolder -->
+    <ImageView
+        android:id="@+id/iv_seat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/seat_available"
+        android:contentDescription="Seat background" />
+
+    <!-- TextView để hiển thị tên ghế (A1, B2...) -->
+    <!-- ID 'tv_seat_label' khớp với logic trong SeatViewHolder -->
+    <TextView
+        android:id="@+id/tv_seat_label"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="A1" />
+
+</FrameLayout>
