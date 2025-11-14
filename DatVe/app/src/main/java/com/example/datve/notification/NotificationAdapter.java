@@ -1,5 +1,7 @@
 package com.example.datve.notification;
 
+import static android.text.TextUtils.split;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.datve.R;
@@ -53,12 +56,23 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         // Xử lý sự kiện click vào một thông báo
         holder.itemView.setOnClickListener(v -> {
-            if (!notification.isRead()) {
-                // Chỉ xử lý khi thông báo chưa đọc
-                Toast.makeText(context, "Đã đọc: " + notification.getTitle(), Toast.LENGTH_SHORT).show();
-                notification.setRead(true);
-                notifyItemChanged(position); // Cập nhật lại item này
-            }
+//            if (!notification.isRead()) {
+//                // Chỉ xử lý khi thông báo chưa đọc
+//                Toast.makeText(context, "Đã đọc: " + notification.getTitle(), Toast.LENGTH_SHORT).show();
+//                notification.setRead(true);
+//                notifyItemChanged(position); // Cập nhật lại item này
+//            }
+            String msg = notification.getContent().replace("|", "\n");
+            msg = notification.getContent().replaceAll("\\s*\\|\\s*", "\n");
+            new AlertDialog.Builder(context)
+                    .setTitle(notification.getTitle()) // Đặt tiêu đề của dialog
+                    .setMessage(msg) // Đặt nội dung chi tiết của dialog
+                    .setPositiveButton("Đóng", (dialog, which) -> {
+                        // Khi nhấn nút "Đóng", chỉ cần tắt dialog đi
+                        dialog.dismiss();
+                    })
+                    .setCancelable(true) // Cho phép người dùng tắt dialog bằng cách bấm ra ngoài
+                    .show(); // Hiển thị dialog
         });
     }
 

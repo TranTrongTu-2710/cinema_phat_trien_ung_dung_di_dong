@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 },
                 error -> {
                     showLoading(false);
-                    if (error.networkResponse != null && error.networkResponse.statusCode == 401) {
+                    if (error.networkResponse != null && error.networkResponse.statusCode == 400) {
                         Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(LoginActivity.this, "Lỗi kết nối hoặc server không phản hồi.", Toast.LENGTH_LONG).show();

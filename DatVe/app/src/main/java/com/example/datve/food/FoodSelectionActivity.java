@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -24,7 +26,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.datve.MainActivity;
 import com.example.datve.R;
 import com.example.datve.user.SessionManager;
-import com.example.datve.user.UserService;
+import com.example.datve.voucher.Voucher;
+import com.example.datve.voucher.VoucherSelectionBottomSheet;
 import com.google.android.material.card.MaterialCardView;
 
 import org.json.JSONArray;
@@ -38,9 +41,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-// Sửa lại interface cho khớp
-public class FoodSelectionActivity extends AppCompatActivity implements FoodAdapter.OnQuantityChangedListener {
+public class FoodSelectionActivity extends AppCompatActivity implements
+        FoodAdapter.OnQuantityChangedListener, VoucherSelectionBottomSheet.VoucherSelectionListener {
 
+    // ... (Các hằng số và khai báo biến giữ nguyên) ...
     public static final String EXTRA_SELECTED_SEATS = "SELECTED_SEATS";
     public static final String EXTRA_TOTAL_SEAT_PRICE = "TOTAL_SEAT_PRICE";
     public static final String EXTRA_SHOWTIME_ID = "SHOWTIME_ID";
@@ -50,29 +54,36 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
 
     private List<String> selectedSeats;
     private int totalSeatPrice;
-    private String showtimeId;
-    private String selectedDate;
-    private String startTime;
-    private String movieTitle;
+    private String showtimeId, selectedDate, startTime, movieTitle;
 
+    // UI Views
     private RecyclerView recyclerViewFoods;
-    private TextView tvSelectedSeats;
-    private TextView tvSeatPrice;
-    private TextView tvFoodPrice;
-    private TextView tvTotalPrice;
-    private TextView tvLoginStatus;
+    private TextView tvSelectedSeats, tvSeatPrice, tvFoodPrice, tvTotalPrice, tvLoginStatus;
     private MaterialCardView cardLoginStatus;
     private Button btnContinue;
 
+    // Voucher UI Views
+    private TextView tvSelectVoucher, tvVoucherDiscount, tvAppliedVoucherName;
+    private LinearLayout layoutVoucherDiscount;
+    private RelativeLayout layoutAppliedVoucher;
+    private ImageView ivRemoveVoucher;
+
+    // Data
     private List<Food> foods = new ArrayList<>();
     private FoodAdapter foodAdapter;
     private int totalFoodPrice = 0;
 
-    private SessionManager sessionManager;
-    private UserService userService;
+    private List<Voucher> availableVouchers = new ArrayList<>();
+    private Voucher selectedVoucher = null;
+    private int discountAmount = 0;
 
+    private SessionManager sessionManager;
+
+    // URLs
     private static final String FOOD_BASE_URL = "http://10.0.2.2:8080/foods";
     private static final String RESERVATION_URL = "http://10.0.2.2:8080/reservations";
+    private static final String VOUCHER_BASE_URL = "http://10.0.2.2:8080/api/v1/users/";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +91,6 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         setContentView(R.layout.activity_food_selection);
 
         sessionManager = new SessionManager(this);
-        userService = new UserService(this);
 
         if (!getIntentData()) {
             return;
@@ -88,6 +98,7 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
 
         setupUI();
         fetchFoods();
+        fetchVouchers();
         handleOnBackPressed();
     }
 
@@ -97,10 +108,9 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         showtimeId = getIntent().getStringExtra(EXTRA_SHOWTIME_ID);
         selectedDate = getIntent().getStringExtra(EXTRA_SELECTED_DATE);
         startTime = getIntent().getStringExtra(EXTRA_START_TIME);
-//        movieTitle = getIntent().getStringExtra(EXTRA_MOVIE_TITLE);
 
-
-        if (selectedSeats == null || selectedSeats.isEmpty() || showtimeId == null || selectedDate == null || startTime == null) {
+        // Sửa lỗi: Thêm kiểm tra movieTitle
+        if (selectedSeats == null || selectedSeats.isEmpty() || showtimeId == null || selectedDate == null ) {
             Toast.makeText(this, "Lỗi: Thiếu thông tin đặt vé.", Toast.LENGTH_SHORT).show();
             finish();
             return false;
@@ -117,6 +127,7 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         }
         toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        // Ánh xạ các view cũ
         recyclerViewFoods = findViewById(R.id.recycler_view_foods);
         tvSelectedSeats = findViewById(R.id.tv_selected_seats);
         tvSeatPrice = findViewById(R.id.tv_seat_price);
@@ -126,55 +137,177 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         cardLoginStatus = findViewById(R.id.card_login_status);
         btnContinue = findViewById(R.id.btn_continue);
 
+        // Ánh xạ các view cho voucher
+        tvSelectVoucher = findViewById(R.id.tv_select_voucher);
+        tvVoucherDiscount = findViewById(R.id.tv_voucher_discount);
+        layoutVoucherDiscount = findViewById(R.id.layout_voucher_discount);
+        layoutAppliedVoucher = findViewById(R.id.layout_applied_voucher);
+        tvAppliedVoucherName = findViewById(R.id.tv_applied_voucher_name);
+        ivRemoveVoucher = findViewById(R.id.iv_remove_voucher);
+
         tvSelectedSeats.setText("Ghế: " + String.join(", ", selectedSeats));
         updateLoginStatus();
         updatePrices();
 
-        btnContinue.setOnClickListener(v -> {
-            if (sessionManager.isLoggedIn()) {
-                createReservationWithUserInfo();
-            } else {
-                showUserInfoDialog();
-            }
-        });
+        btnContinue.setOnClickListener(v -> createReservationWithUserInfo());
+        tvSelectVoucher.setOnClickListener(v -> showVoucherSelectionDialog());
+        ivRemoveVoucher.setOnClickListener(v -> removeVoucher());
 
-        // Khởi tạo adapter với listener mới
         foodAdapter = new FoodAdapter(foods, this);
         recyclerViewFoods.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFoods.setAdapter(foodAdapter);
     }
 
-    // Sửa lại hàm này để lấy username đăng nhập
+    // ... (Các hàm fetchFoods, fetchVouchers, showVoucherSelectionDialog, onVoucherSelected, removeVoucher giữ nguyên) ...
+
+    private void fetchFoods() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, FOOD_BASE_URL, null,
+                response -> {
+                    try {
+                        foods.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            foods.add(new Food(response.getJSONObject(i)));
+                        }
+                        foodAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Lỗi xử lý dữ liệu đồ ăn", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(this, "Không thể tải danh sách đồ ăn", Toast.LENGTH_SHORT).show();
+                });
+        queue.add(request);
+    }
+
+    private void fetchVouchers() {
+        if (!sessionManager.isLoggedIn() || sessionManager.getUserId() == null) {
+            return;
+        }
+        String userId = sessionManager.getUserId();
+        String url = VOUCHER_BASE_URL + userId + "/unused-vouchers?onlyActive=true";
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    availableVouchers.clear();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            availableVouchers.add(new Voucher(response.getJSONObject(i)));
+                        }
+                    } catch (JSONException e) {
+                        Log.e("Voucher", "Error parsing vouchers", e);
+                    }
+                },
+                error -> Log.e("Voucher", "Error fetching vouchers", error)
+        );
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private void showVoucherSelectionDialog() {
+        if (availableVouchers.isEmpty()){
+            Toast.makeText(this, "Bạn không có voucher nào.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int currentTotal = totalSeatPrice + totalFoodPrice;
+        VoucherSelectionBottomSheet bottomSheet = VoucherSelectionBottomSheet.newInstance(new ArrayList<>(availableVouchers), currentTotal);
+        bottomSheet.show(getSupportFragmentManager(), "VoucherBottomSheet");
+    }
+
+    @Override
+    public void onVoucherSelected(Voucher voucher) {
+        this.selectedVoucher = voucher;
+        updatePrices();
+    }
+
+    private void removeVoucher() {
+        this.selectedVoucher = null;
+        updatePrices();
+    }
+
+    private void updatePrices() {
+        int originalTotal = totalSeatPrice + totalFoodPrice;
+
+        if (selectedVoucher != null) {
+            if (originalTotal < selectedVoucher.getMinOrderTotal()) {
+                Toast.makeText(this, "Voucher không còn hợp lệ, đã tự động hủy.", Toast.LENGTH_SHORT).show();
+                removeVoucher();
+                return;
+            }
+            discountAmount = selectedVoucher.calculateDiscount(originalTotal);
+        } else {
+            discountAmount = 0;
+        }
+
+        int finalTotal = originalTotal - discountAmount;
+
+        NumberFormat format = NumberFormat.getInstance(new Locale("vi", "VN"));
+        tvSeatPrice.setText(format.format(totalSeatPrice) + "đ");
+        tvFoodPrice.setText(format.format(totalFoodPrice) + "đ");
+        tvTotalPrice.setText(format.format(finalTotal) + "đ");
+
+        if (discountAmount > 0 && selectedVoucher != null) {
+            tvVoucherDiscount.setText("-" + format.format(discountAmount) + "đ");
+            layoutVoucherDiscount.setVisibility(View.VISIBLE);
+            tvAppliedVoucherName.setText("Đã áp dụng: " + selectedVoucher.getName());
+            layoutAppliedVoucher.setVisibility(View.VISIBLE);
+            tvSelectVoucher.setVisibility(View.GONE);
+        } else {
+            layoutVoucherDiscount.setVisibility(View.GONE);
+            layoutAppliedVoucher.setVisibility(View.GONE);
+            tvSelectVoucher.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onQuantityChanged() {
+        totalFoodPrice = 0;
+        for (Food f : foods) {
+            totalFoodPrice += f.getTotalPrice();
+        }
+        updatePrices();
+    }
+
     private void createReservationWithUserInfo() {
-        String username = sessionManager.getUserUsername(); // Lấy username thay vì name
+        if (!sessionManager.isLoggedIn()) {
+            showUserInfoDialog();
+            return;
+        }
+        String username = sessionManager.getUserUsername();
         String phone = sessionManager.getUserPhone();
 
         if (username == null || phone == null) {
-            Toast.makeText(this, "Thông tin người dùng không đầy đủ. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Thông tin người dùng không đầy đủ.", Toast.LENGTH_SHORT).show();
             return;
         }
         createReservation(username, phone);
     }
 
-    // Sửa lại hàm này để gửi đi một mảng đồ ăn
     private void createReservation(String username, String phone) {
         RequestQueue queue = Volley.newRequestQueue(this);
         try {
             JSONObject requestBody = new JSONObject();
             requestBody.put("seats", new JSONArray(selectedSeats));
-
-            // Lấy tất cả đồ ăn đã chọn dưới dạng mảng JSON
-            JSONArray selectedFoodsArray = getSelectedFoodsAsJsonArray();
-            // Đặt tên key là "foods" (số nhiều) hoặc theo yêu cầu API của bạn
-            requestBody.put("foods", selectedFoodsArray);
-
+            requestBody.put("food", getSelectedFoodsAsJsonArray());
             requestBody.put("checkin", false);
             requestBody.put("showtimeId", showtimeId);
             requestBody.put("date", selectedDate + "T00:00:00.000Z");
             requestBody.put("startAt", startTime);
             requestBody.put("username", username);
             requestBody.put("phone", phone);
-            requestBody.put("total", totalSeatPrice + totalFoodPrice);
+
+            // === THAY ĐỔI THEO YÊU CẦU ===
+            // Chỉ thêm `userId` và `voucherId` nếu có voucher được áp dụng thành công
+            if (selectedVoucher != null && discountAmount > 0) {
+                requestBody.put("voucherId", selectedVoucher.getId());
+                // Chỉ gửi userId khi có voucher được chọn
+                if (sessionManager.isLoggedIn() && sessionManager.getUserId() != null) {
+                    requestBody.put("userId", sessionManager.getUserId());
+                }
+            }
+            // Nếu không có voucher, 'userId' sẽ không được gửi đi
+
+            int finalTotal = totalSeatPrice + totalFoodPrice - discountAmount;
+            requestBody.put("total", finalTotal);
 
             Log.d("Reservation", "Sending request: " + requestBody.toString());
 
@@ -186,19 +319,7 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
                     error -> {
                         Log.e("Reservation", "Error: " + error.toString());
                         handleReservationError(error);
-                    }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    if (sessionManager.isLoggedIn()) {
-                        String token = sessionManager.getToken();
-                        if (token != null && !token.isEmpty()) {
-                            headers.put("Authorization", "Bearer " + token);
-                        }
-                    }
-                    return headers;
-                }
-            };
+                    });
             queue.add(request);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -206,7 +327,6 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         }
     }
 
-    // Hàm mới để lấy tất cả đồ ăn đã chọn
     private JSONArray getSelectedFoodsAsJsonArray() {
         JSONArray foodArray = new JSONArray();
         for (Food food : foods) {
@@ -214,6 +334,7 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
                 try {
                     JSONObject foodObject = new JSONObject();
                     foodObject.put("foodId", food.getId());
+                    foodObject.put("foodName", food.getName());
                     foodObject.put("price", food.getPrice());
                     foodObject.put("quantity", food.getQuantity());
                     foodArray.put(foodObject);
@@ -225,37 +346,18 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         return foodArray;
     }
 
-    // Sửa lại hàm này cho khớp với listener mới
-    @Override
-    public void onQuantityChanged() {
-        totalFoodPrice = 0;
-        for (Food f : foods) {
-            totalFoodPrice += f.getTotalPrice();
-        }
-        updatePrices();
-    }
-
-    // Sửa lại hàm này để hiển thị chi tiết đồ ăn
     private void showSuccessDialog(String username, String phone) {
         StringBuilder message = new StringBuilder();
         message.append("Cảm ơn ").append(username).append("!\n\n");
         message.append("📞 SĐT: ").append(phone).append("\n");
-        message.append("🎬 Ghế: ").append(getSeatsString()).append("\n");
+        message.append("🎬 Ghế: ").append(String.join(", ", selectedSeats)).append("\n");
 
-        // Tạo chuỗi chi tiết đồ ăn
-        StringBuilder foodDetails = new StringBuilder();
-        for (Food food : foods) {
-            if (food.getQuantity() > 0) {
-                foodDetails.append(" - ").append(food.getName())
-                        .append(" (x").append(food.getQuantity()).append(")\n");
-            }
+        if (discountAmount > 0 && selectedVoucher != null) {
+            message.append("🏷️ Voucher: ").append(selectedVoucher.getName()).append("\n");
         }
 
-        if (foodDetails.length() > 0) {
-            message.append("🍿 Đồ ăn:\n").append(foodDetails);
-        }
-
-        message.append("💰 Tổng tiền: ").append(formatPrice(totalSeatPrice + totalFoodPrice)).append("\n\n");
+        int finalTotal = totalSeatPrice + totalFoodPrice - discountAmount;
+        message.append("💰 Tổng tiền: ").append(NumberFormat.getInstance(new Locale("vi", "VN")).format(finalTotal)).append("đ\n\n");
         message.append("Vui lòng đến rạp trước 15 phút để check-in.");
 
         new AlertDialog.Builder(this)
@@ -270,9 +372,6 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
                 .setCancelable(false)
                 .show();
     }
-
-
-    // --- CÁC HÀM KHÁC GIỮ NGUYÊN ---
 
     private void handleOnBackPressed() {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -291,19 +390,17 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
+
     private void updateLoginStatus() {
         if (sessionManager.isLoggedIn()) {
             String displayInfo = sessionManager.getDisplayInfo();
             if (sessionManager.isUserFullInfoLoaded()) {
                 tvLoginStatus.setText("Đặt vé với: " + displayInfo);
-                btnContinue.setText("Đặt vé ngay");
+                btnContinue.setText("Đặt vé");
             } else {
                 String username = sessionManager.getUserUsername();
                 tvLoginStatus.setText(username != null ? "Đang tải thông tin... (" + username + ")" : "Đang tải thông tin...");
                 btnContinue.setText("Đặt vé");
-                if (sessionManager.needToFetchUserInfo()) {
-                    userService.fetchUserInfoIfNeeded();
-                }
             }
         } else {
             tvLoginStatus.setText("Bạn đang đặt vé với tư cách khách");
@@ -311,86 +408,22 @@ public class FoodSelectionActivity extends AppCompatActivity implements FoodAdap
         }
         cardLoginStatus.setVisibility(View.VISIBLE);
     }
-    private void fetchFoods() {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d("FoodSelection", "Fetching foods from: " + FOOD_BASE_URL);
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, FOOD_BASE_URL, null,
-                response -> {
-                    try {
-                        foods.clear();
-                        for (int i = 0; i < response.length(); i++) {
-                            foods.add(new Food(response.getJSONObject(i)));
-                        }
-                        foodAdapter.notifyDataSetChanged();
-                        Log.d("FoodSelection", "Loaded " + foods.size() + " foods");
-                    } catch (JSONException e) {
-                        Log.e("FoodSelection", "Error parsing food data", e);
-                        Toast.makeText(this, "Lỗi xử lý dữ liệu đồ ăn", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                error -> {
-                    Log.e("FoodSelection", "Error: " + error.toString());
-                    Toast.makeText(this, "Không thể tải danh sách đồ ăn", Toast.LENGTH_SHORT).show();
-                });
-        queue.add(request);
-    }
-    private void updatePrices() {
-        NumberFormat format = NumberFormat.getInstance(new Locale("vi", "VN"));
-        tvSeatPrice.setText(format.format(totalSeatPrice) + "đ");
-        tvFoodPrice.setText(format.format(totalFoodPrice) + "đ");
-        int totalPrice = totalSeatPrice + totalFoodPrice;
-        tvTotalPrice.setText(format.format(totalPrice) + "đ");
-    }
+
     private void showUserInfoDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông tin đặt vé");
-        AlertDialog dialog = builder.create();
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_user_info, null);
-        dialog.setView(dialogView);
-        TextView tvTotal = dialogView.findViewById(R.id.tv_dialog_total);
-        androidx.appcompat.widget.AppCompatEditText etUsername = dialogView.findViewById(R.id.et_username);
-        androidx.appcompat.widget.AppCompatEditText etPhone = dialogView.findViewById(R.id.et_phone);
-        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
-        int totalPrice = totalSeatPrice + totalFoodPrice;
-        tvTotal.setText("Tổng tiền: " + formatPrice(totalPrice));
-        btnConfirm.setOnClickListener(v -> {
-            String username = etUsername.getText().toString().trim();
-            String phone = etPhone.getText().toString().trim();
-            if (username.isEmpty() || phone.isEmpty() || !isValidPhone(phone)) {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ và chính xác thông tin", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            createReservation(username, phone);
-            dialog.dismiss();
-        });
-        dialog.setCancelable(true);
-        dialog.show();
+        Toast.makeText(this, "Vui lòng đăng nhập để tiếp tục", Toast.LENGTH_SHORT).show();
     }
-    private boolean isValidPhone(String phone) {
-        return phone.matches("^[0-9]{10,11}$");
-    }
+
     private void handleReservationError(com.android.volley.VolleyError error) {
         String errorMsg = "Đặt vé thất bại. Vui lòng thử lại sau.";
         if (error.networkResponse != null && error.networkResponse.data != null) {
             String responseBody = new String(error.networkResponse.data);
-            Log.e("Reservation", "Error response: " + responseBody);
-            if (responseBody.contains("occupied")) {
-                errorMsg = "Ghế đã có người đặt. Vui lòng chọn lại.";
-            } else {
-                try {
-                    JSONObject obj = new JSONObject(responseBody);
-                    errorMsg = obj.optString("message", errorMsg);
-                } catch (JSONException e) {
-                    // Ignore
-                }
+            try {
+                JSONObject obj = new JSONObject(responseBody);
+                errorMsg = obj.optString("message", errorMsg);
+            } catch (JSONException e) {
+                // Ignore
             }
         }
         Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
-    }
-    private String getSeatsString() {
-        return String.join(", ", selectedSeats);
-    }
-    private String formatPrice(int price) {
-        return NumberFormat.getInstance(new Locale("vi", "VN")).format(price) + "đ";
     }
 }

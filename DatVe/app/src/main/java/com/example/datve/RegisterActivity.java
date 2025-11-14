@@ -121,8 +121,8 @@ public class RegisterActivity extends AppCompatActivity {
                     // Xử lý khi có lỗi xảy ra
                     showLoading(false);
                     // Lỗi 409 Conflict thường là do username/email đã tồn tại
-                    if (error.networkResponse != null && error.networkResponse.statusCode == 409) {
-                        Toast.makeText(RegisterActivity.this, "Tên đăng nhập hoặc email đã tồn tại", Toast.LENGTH_LONG).show();
+                    if (error.networkResponse != null && error.networkResponse.statusCode == 400) {
+                        Toast.makeText(RegisterActivity.this, "Tên đăng nhập, số điện thoại hoặc email đã tồn tại", Toast.LENGTH_LONG).show();
                     } else {
                         // Các lỗi khác
                         Toast.makeText(RegisterActivity.this, "Đã xảy ra lỗi. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
