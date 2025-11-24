@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-36:12
-INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-36:12
-INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-36:12
-INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-36:12
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-71:12
+INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-71:12
+INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-71:12
+INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:1-71:12
 MERGED from [com.android.volley:volley:1.2.1] C:\Users\trant\.gradle\caches\8.13\transforms\93554feafe0966e158f14f4ea6503716\transformed\volley-1.2.1\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.13.0] C:\Users\trant\.gradle\caches\8.13\transforms\bde89b41eb009ec239022bc4694d805b\transformed\material-1.13.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.1] C:\Users\trant\.gradle\caches\8.13\transforms\c6488655cccd861eb5621874cddf8eee\transformed\constraintlayout-2.2.1\AndroidManifest.xml:2:1-9:12
@@ -58,12 +58,12 @@ MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\trant\.
 	xmlns:android
 		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:2:11-69
 uses-permission#android.permission.INTERNET
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:4:5-67
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:6:5-67
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:4:22-64
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:6:22-64
 application
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:5:5-34:19
-INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:5:5-34:19
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:8:5-69:19
+INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:8:5-69:19
 MERGED from [com.google.android.material:material:1.13.0] C:\Users\trant\.gradle\caches\8.13\transforms\bde89b41eb009ec239022bc4694d805b\transformed\material-1.13.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.13.0] C:\Users\trant\.gradle\caches\8.13\transforms\bde89b41eb009ec239022bc4694d805b\transformed\material-1.13.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.1] C:\Users\trant\.gradle\caches\8.13\transforms\c6488655cccd861eb5621874cddf8eee\transformed\constraintlayout-2.2.1\AndroidManifest.xml:7:5-20
@@ -85,69 +85,107 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\tr
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.0] C:\Users\trant\.gradle\caches\8.13\transforms\e14d9122d45fb71ea63e5eedb2149f5e\transformed\core-1.13.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:12:9-35
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:15:9-35
 	android:label
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:10:9-41
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:13:9-41
 	android:fullBackupContent
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:8:9-54
-	android:roundIcon
 		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:11:9-54
+	android:roundIcon
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:14:9-54
 	tools:targetApi
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:15:9-29
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:18:9-29
 	android:icon
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:9:9-43
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:12:9-43
 	android:allowBackup
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:6:9-35
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:9:9-35
 	android:theme
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:13:9-43
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:16:9-43
 	android:dataExtractionRules
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:7:9-65
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:10:9-65
 	android:usesCleartextTraffic
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:14:9-44
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:17:9-44
 activity#com.example.datve.MainActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:17:9-27:20
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:24:9-42:20
 	android:exported
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:21:13-36
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:26:13-36
 	tools:targetApi
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:19:13-33
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:29:13-33
+	android:theme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:27:13-59
 	android:usesCleartextTraffic
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:18:13-48
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:28:13-48
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:20:13-41
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:25:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:22:13-26:29
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:30:13-33:29
 action#android.intent.action.MAIN
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:23:17-69
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:31:17-69
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:23:25-66
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:31:25-66
 category#android.intent.category.LAUNCHER
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:25:17-77
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:32:17-77
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:25:27-74
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:32:27-74
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:vnpay-return+data:scheme:datveapp
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:34:13-41:29
+action#android.intent.action.VIEW
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:35:17-69
+	android:name
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:35:25-66
+category#android.intent.category.DEFAULT
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:36:17-76
+	android:name
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:36:27-73
+category#android.intent.category.BROWSABLE
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:37:17-78
+	android:name
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:37:27-75
+data
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:38:17-40:49
+	android:host
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:39:21-48
+	android:scheme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:40:21-46
 activity#com.example.datve.LoginActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:28:9-68
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:44:9-68
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:28:19-65
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:44:19-65
 activity#com.example.datve.RegisterActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:29:9-71
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:45:9-71
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:29:19-68
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:45:19-68
 activity#com.example.datve.seat.SeatSelectionActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:30:9-81
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:51:9-53:62
+	android:theme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:53:13-59
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:30:19-78
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:52:13-72
 activity#com.example.datve.food.FoodSelectionActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:31:9-81
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:54:9-56:62
+	android:theme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:56:13-59
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:31:19-78
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:55:13-72
 activity#com.example.datve.showtime.SelectShowtimeActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:32:9-86
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:57:9-59:62
+	android:theme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:59:13-59
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:32:19-83
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:58:13-77
 activity#com.example.datve.user.ChangePasswordActivity
-ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:33:9-82
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:60:9-62:62
+	android:theme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:62:13-59
 	android:name
-		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:33:19-79
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:61:13-73
+activity#com.example.datve.payment.VNPayPaymentActivity
+ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:65:9-68:62
+	android:exported
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:67:13-37
+	android:theme
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:68:13-59
+	android:name
+		ADDED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml:66:13-74
 uses-sdk
 INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\hoctrentruong\hocandroi\DatVe\app\src\main\AndroidManifest.xml

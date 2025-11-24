@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="gray">#FF757575</color>
+    <color name="gray_light">#FFE0E0E0</color>
+    <color name="green">#FF4CAF50</color>
     <color name="grey_text">#E3F2FD</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="red">#FFE53935</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
     <color name="unread_notification_bg">#E3F2FD</color>
     <color name="white">#FFFFFFFF</color>
     <item name="btn_confirm_change_password" type="id"/>
@@ -41,9 +49,16 @@
     <item name="tv_seat_label" type="id"/>
     <item name="tv_title" type="id"/>
     <string name="app_name">BTL_RapChieuPhim</string>
-    <style name="Base.Theme.DatVe" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.DatVe" parent="Theme.Material3.DayNight">
         
         
     </style>
     <style name="Theme.DatVe" parent="Base.Theme.DatVe"/>
+    <style name="Theme.DatVe.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+        
+        
+        
+    </style>
 </resources>

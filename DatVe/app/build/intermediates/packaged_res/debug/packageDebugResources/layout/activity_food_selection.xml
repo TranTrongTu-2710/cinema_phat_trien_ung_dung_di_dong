@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="?android:attr/colorBackground"
     tools:context=".food.FoodSelectionActivity">
 
+    <!-- AppBar -->
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,62 +16,140 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Chọn đồ ăn" />
-
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Main Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Thay đổi ở đây: paddingBottom được tăng lên để không bị che bởi bottom bar mới -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:paddingBottom="150dp">
+            android:padding="16dp">
 
-            <!-- Thông tin trạng thái đăng nhập (Giữ nguyên) -->
+            <!-- Login Status Card -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_login_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
-                android:visibility="gone"
-                android:id="@+id/card_login_status">
-                <LinearLayout
+                app:cardCornerRadius="8dp">
+
+                <TextView
+                    android:id="@+id/tv_login_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:padding="12dp"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_person"
-                        app:tint="?attr/colorPrimary" />
-                    <TextView
-                        android:id="@+id/tv_login_status"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Bạn đang đặt vé với tư cách khách"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                    android:text="Đặt vé với: ..."
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:drawableStart="@drawable/ic_person"
+                    android:drawablePadding="8dp" />
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Thông tin đơn hàng (Sửa đổi) -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Foods RecyclerView -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chọn đồ ăn (tuỳ chọn)"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="12dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_foods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp">
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Voucher Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mã giảm giá"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Select Voucher Button -->
+            <TextView
+                android:id="@+id/tv_select_voucher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🏷️ Chọn voucher"
+                android:textSize="16sp"
+                android:textColor="@color/purple_500"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Applied Voucher Display -->
+            <RelativeLayout
+                android:id="@+id/layout_applied_voucher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:background="@drawable/voucher_applied_background"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tv_applied_voucher_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Đã áp dụng: Voucher 20%"
+                    android:textSize="14sp"
+                    android:textColor="@color/green"
+                    android:drawableStart="@drawable/ic_check_circle"
+                    android:drawablePadding="8dp" />
+
+                <ImageView
+                    android:id="@+id/iv_remove_voucher"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_close"
+                    android:contentDescription="Xóa voucher"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+            </RelativeLayout>
+
+            <!-- === THÊM MỚI: Payment Method Section === -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phương thức thanh toán"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_payment_method"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -80,202 +157,188 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Các phần cũ (Giữ nguyên) -->
+                    <RadioGroup
+                        android:id="@+id/radio_group_payment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- VNPay Payment -->
+                        <RadioButton
+                            android:id="@+id/radio_vnpay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="💳 Thanh toán qua VNPay"
+                            android:textSize="16sp"
+                            android:padding="12dp"
+                            android:checked="true" />
+
+                        <!-- Cash Payment -->
+                        <RadioButton
+                            android:id="@+id/radio_cash"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="💵 Thanh toán tiền mặt tại quầy"
+                            android:textSize="16sp"
+                            android:padding="12dp" />
+                    </RadioGroup>
+
+                    <!-- Payment Info -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ℹ️ VNPay hỗ trợ: ATM, Visa, MasterCard, QR Code"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Price Summary Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chi tiết thanh toán"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Selected Seats -->
                     <TextView
                         android:id="@+id/tv_selected_seats"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:text="Ghế: A1, A2" />
+                        android:text="Ghế: A1, A2, A3"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp" />
 
+                    <!-- Seat Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tiền ghế:"
-                            android:textColor="?android:attr/textColorSecondary" />
+                            android:text="Tiền vé:"
+                            android:textSize="14sp" />
+
                         <TextView
                             android:id="@+id/tv_seat_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0đ"
-                            android:textColor="?android:attr/textColorPrimary"
-                            android:textStyle="bold" />
+                            android:text="300,000đ"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
+                    <!-- Food Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tiền đồ ăn:"
-                            android:textColor="?android:attr/textColorSecondary" />
+                            android:text="Đồ ăn:"
+                            android:textSize="14sp" />
+
                         <TextView
                             android:id="@+id/tv_food_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0đ"
-                            android:textColor="?android:attr/textColorPrimary"
-                            android:textStyle="bold" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
-                    <!-- THÊM MỚI: Dòng hiển thị giảm giá voucher -->
+                    <!-- Voucher Discount (conditionally visible) -->
                     <LinearLayout
                         android:id="@+id/layout_voucher_discount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:visibility="gone"
-                        tools:visibility="visible">
+                        android:layout_marginBottom="4dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Giảm giá voucher:"
-                            android:textColor="@color/design_default_color_error" />
+                            android:text="Giảm giá:"
+                            android:textSize="14sp"
+                            android:textColor="@color/green" />
 
                         <TextView
                             android:id="@+id/tv_voucher_discount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/design_default_color_error"
-                            android:textStyle="bold"
-                            tools:text="-50,000đ" />
+                            android:text="-50,000đ"
+                            android:textSize="14sp"
+                            android:textColor="@color/green" />
                     </LinearLayout>
 
-                    <!-- Dòng kẻ ngang (Giữ nguyên) -->
+                    <!-- Divider -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="8dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/gray_light"
+                        android:layout_marginVertical="8dp" />
 
-                    <!-- Tổng tiền (Giữ nguyên) -->
+                    <!-- Total Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tổng tiền:"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="Tổng cộng:"
                             android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
                         <TextView
                             android:id="@+id/tv_total_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0đ"
-                            android:textColor="?attr/colorPrimary"
+                            android:text="300,000đ"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Danh sách đồ ăn (Giữ nguyên, chỉ bỏ margin bottom) -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Đồ ăn và thức uống"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_foods"
+            <!-- Continue Button -->
+            <Button
+                android:id="@+id/btn_continue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="3"
-                tools:listitem="@layout/food_item" />
-
+                android:layout_height="56dp"
+                android:text="XÁC NHẬN THANH TOÁN"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/purple_500"
+                android:layout_marginBottom="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <!-- THAY ĐỔI LỚN: Bottom bar chứa voucher và nút đặt vé -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:background="?android:attr/colorBackground"
-        android:elevation="8dp">
-
-        <!-- Khu vực chọn Voucher -->
-        <TextView
-            android:id="@+id/tv_select_voucher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chọn hoặc nhập mã voucher"
-            android:textColor="?attr/colorPrimary"
-            android:textStyle="bold"
-            android:padding="16dp"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            app:drawableStartCompat="@drawable/ic_voucher"
-            app:drawableEndCompat="@drawable/ic_chevron_right"
-            android:drawablePadding="8dp" />
-
-        <!-- Khu vực hiển thị Voucher đã chọn -->
-        <RelativeLayout
-            android:id="@+id/layout_applied_voucher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="12dp"
-            android:background="#E8F5E9"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <TextView
-                android:id="@+id/tv_applied_voucher_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/iv_remove_voucher"
-                android:textColor="#2E7D32"
-                android:textStyle="bold"
-                tools:text="Đã áp dụng: Black Friday 25%" />
-
-            <ImageView
-                android:id="@+id/iv_remove_voucher"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_close"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="#4CAF50" />
-        </RelativeLayout>
-
-
-        <!-- Nút Đặt vé (Giữ nguyên ID) -->
-        <Button
-            android:id="@+id/btn_continue"
-            style="@style/Widget.Material3.Button.UnelevatedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đặt vé"
-            android:paddingVertical="14dp"
-            android:textSize="16sp"
-            app:cornerRadius="0dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"/>
-
-    </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,18 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-// === THAY ĐỔI QUAN TRỌNG: Import JsonObjectRequest ===
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.datve.R;
 import com.example.datve.user.SessionManager;
 
-// === THAY ĐỔI QUAN TRỌNG: Import JSONArray để xử lý mảng items ===
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +39,7 @@ public class NotificationFragment extends Fragment {
     private SessionManager sessionManager;
     private RequestQueue requestQueue;
 
-    private static final String PUBLIC_NEWS_URL = "http://10.0.2.2:8080/news/public";
-    private static final String USER_NEWS_URL = "http://10.0.2.2:8080/news/visible";
+    private static final String NEWS_BASE_URL = "http://10.0.2.2:8080/news";
 
     @Nullable
     @Override
@@ -68,22 +66,24 @@ public class NotificationFragment extends Fragment {
         String userId = sessionManager.getUserId();
 
         if (isLoggedIn && userId != null) {
-            url = USER_NEWS_URL + "/" + userId;
+            url = NEWS_BASE_URL + "/visible/" + userId;
         } else {
-            url = PUBLIC_NEWS_URL;
+            url = NEWS_BASE_URL + "/public";
         }
 
         Log.d("NotificationFragment", "Fetching URL: " + url);
 
-        // === THAY ĐỔI TỪ JsonArrayRequest SANG JsonObjectRequest ===
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        // 1. Lấy mảng JSON có key là "items" từ đối tượng response
+                        if (!response.has("items")) {
+                            Log.e("NotificationFragment", "Response JSON không chứa key 'items'");
+                            return;
+                        }
+
                         JSONArray itemsArray = response.getJSONArray("items");
 
                         notificationList.clear();
-                        // 2. Lặp qua mảng "itemsArray"
                         for (int i = 0; i < itemsArray.length(); i++) {
                             JSONObject notificationObject = itemsArray.getJSONObject(i);
                             Notification notification = new Notification(notificationObject);
@@ -92,7 +92,10 @@ public class NotificationFragment extends Fragment {
                                 notificationList.add(notification);
                             }
                         }
+
+                        // Cập nhật lại giao diện của RecyclerView
                         notificationAdapter.notifyDataSetChanged();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), "Lỗi xử lý dữ liệu thông báo", Toast.LENGTH_SHORT).show();

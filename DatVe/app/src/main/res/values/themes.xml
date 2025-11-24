@@ -1,9 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.DatVe" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.DatVe" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!-- Theme chính của ứng dụng, theme này CÓ ActionBar mặc định -->
     <style name="Theme.DatVe" parent="Base.Theme.DatVe" />
+
+    <!--
+        === THÊM MỚI TẠI ĐÂY ===
+        Tạo một theme mới kế thừa từ theme chính nhưng không có ActionBar.
+        Chúng ta sẽ dùng theme này cho các Activity nào muốn dùng Toolbar tùy chỉnh.
+    -->
+    <style name="Theme.DatVe.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Bạn có thể tùy chỉnh thêm màu sắc ở đây nếu muốn -->
+        <!-- Ví dụ: -->
+        <!-- <item name="colorPrimary">@color/purple_500</item> -->
+        <!-- <item name="colorPrimaryVariant">@color/purple_700</item> -->
+        <!-- <item name="colorOnPrimary">@color/white</item> -->
+    </style>
+
 </resources>

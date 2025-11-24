@@ -20,10 +20,19 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
 
     private final Context context;
     private final List<Voucher> voucherList;
+    // === THÊM MỚI: Listener để báo cho Fragment biết khi nào cần lưu voucher ===
+    private final OnSaveVoucherListener saveListener;
 
-    public VoucherAdapter(Context context, List<Voucher> voucherList) {
+    // === THÊM MỚI: Interface để giao tiếp với Fragment ===
+    public interface OnSaveVoucherListener {
+        void onSaveVoucherClicked(Voucher voucher, MaterialButton button);
+    }
+
+    // === THAY ĐỔI: Constructor nhận thêm listener ===
+    public VoucherAdapter(Context context, List<Voucher> voucherList, OnSaveVoucherListener listener) {
         this.context = context;
         this.voucherList = voucherList;
+        this.saveListener = listener;
     }
 
     @NonNull
@@ -37,15 +46,17 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
     public void onBindViewHolder(@NonNull VoucherViewHolder holder, int position) {
         Voucher voucher = voucherList.get(position);
 
-        // Cập nhật để hiển thị dữ liệu mới
+        // Cập nhật để hiển thị dữ liệu mới (GIỮ NGUYÊN)
         holder.tvVoucherName.setText(voucher.getName());
         holder.tvVoucherDesc.setText(voucher.getDescription());
         holder.tvExpiryDate.setText("HSD: " + voucher.getEndAt());
-//        holder.ivVoucher.setImageResource(voucher.getImageResId());
 
+        // === THAY ĐỔI: Logic khi nhấn nút btnCopyCode ===
         holder.btnCopyCode.setOnClickListener(v -> {
-            // Logic sao chép mã (bạn có thể tự triển khai)
-            Toast.makeText(context, "Đã sao chép mã: " + voucher.getCode(), Toast.LENGTH_SHORT).show();
+            // Gọi listener ở Fragment để xử lý việc gọi API
+            if (saveListener != null) {
+                saveListener.onSaveVoucherClicked(voucher, holder.btnCopyCode);
+            }
         });
     }
 

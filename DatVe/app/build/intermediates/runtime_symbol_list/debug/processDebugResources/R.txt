@@ -1576,6 +1576,9 @@ int color error_color_material_dark 0x7f05005b
 int color error_color_material_light 0x7f05005c
 int color foreground_material_dark 0x7f05005d
 int color foreground_material_light 0x7f05005e
+int color gray 0x7f0503b5
+int color gray_light 0x7f0503b6
+int color green 0x7f0503b7
 int color grey_text 0x7f05005f
 int color highlighted_text_material_dark 0x7f050060
 int color highlighted_text_material_light 0x7f050061
@@ -2414,6 +2417,9 @@ int color primary_text_default_material_dark 0x7f0503a1
 int color primary_text_default_material_light 0x7f0503a2
 int color primary_text_disabled_material_dark 0x7f0503a3
 int color primary_text_disabled_material_light 0x7f0503a4
+int color purple_500 0x7f0503b8
+int color purple_700 0x7f0503b9
+int color red 0x7f0503ba
 int color ripple_material_dark 0x7f0503a5
 int color ripple_material_light 0x7f0503a6
 int color secondary_text_default_material_dark 0x7f0503a7
@@ -2426,6 +2432,8 @@ int color switch_thumb_material_dark 0x7f0503ad
 int color switch_thumb_material_light 0x7f0503ae
 int color switch_thumb_normal_material_dark 0x7f0503af
 int color switch_thumb_normal_material_light 0x7f0503b0
+int color teal_200 0x7f0503bb
+int color teal_700 0x7f0503bc
 int color tooltip_background_dark 0x7f0503b1
 int color tooltip_background_light 0x7f0503b2
 int color unread_notification_bg 0x7f0503b3
@@ -3553,6 +3561,7 @@ int drawable btn_radio_off_mtrl 0x7f070081
 int drawable btn_radio_off_to_on_mtrl_animation 0x7f070082
 int drawable btn_radio_on_mtrl 0x7f070083
 int drawable btn_radio_on_to_off_mtrl_animation 0x7f070084
+int drawable button_background 0x7f070109
 int drawable counter_button_bg 0x7f070085
 int drawable counter_button_bg_pressed 0x7f070086
 int drawable design_fab_background 0x7f070087
@@ -3571,6 +3580,7 @@ int drawable ic_call_answer_video 0x7f070093
 int drawable ic_call_answer_video_low 0x7f070094
 int drawable ic_call_decline 0x7f070095
 int drawable ic_call_decline_low 0x7f070096
+int drawable ic_check_circle 0x7f07010a
 int drawable ic_chevron_right 0x7f070106
 int drawable ic_clear_black_24 0x7f070097
 int drawable ic_clock_black_24dp 0x7f070098
@@ -3685,6 +3695,7 @@ int drawable tooltip_frame_dark 0x7f070101
 int drawable tooltip_frame_light 0x7f070102
 int drawable voucher 0x7f070103
 int drawable voucher1 0x7f070104
+int drawable voucher_applied_background 0x7f07010b
 int id ALT 0x7f080000
 int id BOTTOM_END 0x7f080001
 int id BOTTOM_START 0x7f080002
@@ -3808,6 +3819,7 @@ int id cache_measures 0x7f080077
 int id callMeasure 0x7f080078
 int id cancel_button 0x7f080079
 int id card_login_status 0x7f08007a
+int id card_payment_method 0x7f08027e
 int id carryVelocity 0x7f08007b
 int id center 0x7f08007c
 int id centerCrop 0x7f08007d
@@ -4108,6 +4120,9 @@ int id progress_circular 0x7f0801a0
 int id progress_horizontal 0x7f0801a1
 int id radio 0x7f0801a2
 int id radio_button_voucher 0x7f080276
+int id radio_cash 0x7f08027f
+int id radio_group_payment 0x7f080280
+int id radio_vnpay 0x7f080281
 int id ratio 0x7f0801a3
 int id rectangles 0x7f0801a4
 int id recyclerView 0x7f0801a5
@@ -4309,6 +4324,7 @@ int id view_tree_view_model_store_owner 0x7f080262
 int id visible 0x7f080263
 int id visible_removing_fragment_view_tag 0x7f080264
 int id voucher_item_root 0x7f08027d
+int id webview_vnpay 0x7f080282
 int id west 0x7f080265
 int id withText 0x7f080266
 int id with_icon 0x7f080267
@@ -4442,6 +4458,7 @@ int layout activity_main 0x7f0b001f
 int layout activity_register 0x7f0b0020
 int layout activity_seat_selection 0x7f0b0021
 int layout activity_select_showtime 0x7f0b0022
+int layout activity_vnpay_payment 0x7f0b0085
 int layout bottom_sheet_voucher_selection 0x7f0b0083
 int layout custom_dialog 0x7f0b0023
 int layout day_item 0x7f0b0024
@@ -5332,6 +5349,7 @@ int style Theme_AppCompat_Light_DialogWhenLarge 0x7f110263
 int style Theme_AppCompat_Light_NoActionBar 0x7f110264
 int style Theme_AppCompat_NoActionBar 0x7f110265
 int style Theme_DatVe 0x7f110266
+int style Theme_DatVe_NoActionBar 0x7f1104cf
 int style Theme_Design 0x7f110267
 int style Theme_Design_BottomSheetDialog 0x7f110268
 int style Theme_Design_Light 0x7f110269
@@ -8152,3 +8170,4 @@ int xml m3_button_group_child_size_change 0x7f130002
 int xml m3_split_button_inner_corner_size_state_list 0x7f130003
 int xml m3expressive_button_shape_state_list 0x7f130004
 int xml m3expressive_connected_buttons_inner_corner_size_state_list 0x7f130005
+int xml network_security_config 0x7f130006

@@ -2,18 +2,28 @@ R_DEF: Internal format may change without notice
 local
 color black
 color day_item_text_color
+color gray
+color gray_light
+color green
 color grey_text
+color purple_500
+color purple_700
+color red
+color teal_200
+color teal_700
 color unread_notification_bg
 color white
 drawable baseline_block_24
 drawable bg_age_rating_tag
 drawable bg_hot_tag
+drawable button_background
 drawable counter_button_bg
 drawable counter_button_bg_pressed
 drawable gradient_black_overlay
 drawable gradient_overlay
 drawable ic_account_circle
 drawable ic_arrow_back
+drawable ic_check_circle
 drawable ic_chevron_right
 drawable ic_close
 drawable ic_content_copy
@@ -38,6 +48,7 @@ drawable selector_counter_button
 drawable selector_day_item_bg
 drawable voucher
 drawable voucher1
+drawable voucher_applied_background
 id app_bar
 id bottom_navigation
 id btn_change_password
@@ -52,6 +63,7 @@ id btn_logout
 id btn_register
 id btn_select_showtime
 id card_login_status
+id card_payment_method
 id collapsing_toolbar
 id day_item_container
 id et_confirm_new_password
@@ -88,6 +100,9 @@ id notification_item_root
 id progressBar
 id progress_bar
 id radio_button_voucher
+id radio_cash
+id radio_group_payment
+id radio_vnpay
 id recyclerView
 id recycler_view_coming_soon
 id recycler_view_days
@@ -150,6 +165,7 @@ id tv_voucher_discount
 id tv_voucher_name
 id viewPager
 id voucher_item_root
+id webview_vnpay
 layout activity_change_password
 layout activity_food_selection
 layout activity_login
@@ -157,6 +173,7 @@ layout activity_main
 layout activity_register
 layout activity_seat_selection
 layout activity_select_showtime
+layout activity_vnpay_payment
 layout bottom_sheet_voucher_selection
 layout day_item
 layout dialog_user_info
@@ -180,5 +197,7 @@ mipmap ic_launcher_round
 string app_name
 style Base.Theme.DatVe
 style Theme.DatVe
+style Theme.DatVe.NoActionBar
 xml backup_rules
 xml data_extraction_rules
+xml network_security_config

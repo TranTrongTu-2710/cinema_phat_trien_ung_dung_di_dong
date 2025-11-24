@@ -1577,6 +1577,9 @@ color error_color_material_dark
 color error_color_material_light
 color foreground_material_dark
 color foreground_material_light
+color gray
+color gray_light
+color green
 color grey_text
 color highlighted_text_material_dark
 color highlighted_text_material_light
@@ -2415,6 +2418,9 @@ color primary_text_default_material_dark
 color primary_text_default_material_light
 color primary_text_disabled_material_dark
 color primary_text_disabled_material_light
+color purple_500
+color purple_700
+color red
 color ripple_material_dark
 color ripple_material_light
 color secondary_text_default_material_dark
@@ -2427,6 +2433,8 @@ color switch_thumb_material_dark
 color switch_thumb_material_light
 color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
+color teal_200
+color teal_700
 color tooltip_background_dark
 color tooltip_background_light
 color unread_notification_bg
@@ -3554,6 +3562,7 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable button_background
 drawable counter_button_bg
 drawable counter_button_bg_pressed
 drawable design_fab_background
@@ -3572,6 +3581,7 @@ drawable ic_call_answer_video
 drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
+drawable ic_check_circle
 drawable ic_chevron_right
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
@@ -3686,6 +3696,7 @@ drawable tooltip_frame_dark
 drawable tooltip_frame_light
 drawable voucher
 drawable voucher1
+drawable voucher_applied_background
 id ALT
 id BOTTOM_END
 id BOTTOM_START
@@ -3809,6 +3820,7 @@ id cache_measures
 id callMeasure
 id cancel_button
 id card_login_status
+id card_payment_method
 id carryVelocity
 id center
 id centerCrop
@@ -4109,6 +4121,9 @@ id progress_circular
 id progress_horizontal
 id radio
 id radio_button_voucher
+id radio_cash
+id radio_group_payment
+id radio_vnpay
 id ratio
 id rectangles
 id recyclerView
@@ -4310,6 +4325,7 @@ id view_tree_view_model_store_owner
 id visible
 id visible_removing_fragment_view_tag
 id voucher_item_root
+id webview_vnpay
 id west
 id withText
 id with_icon
@@ -4443,6 +4459,7 @@ layout activity_main
 layout activity_register
 layout activity_seat_selection
 layout activity_select_showtime
+layout activity_vnpay_payment
 layout bottom_sheet_voucher_selection
 layout custom_dialog
 layout day_item
@@ -5333,6 +5350,7 @@ style Theme_AppCompat_Light_DialogWhenLarge
 style Theme_AppCompat_Light_NoActionBar
 style Theme_AppCompat_NoActionBar
 style Theme_DatVe
+style Theme_DatVe_NoActionBar
 style Theme_Design
 style Theme_Design_BottomSheetDialog
 style Theme_Design_Light
@@ -6115,3 +6133,4 @@ xml m3_button_group_child_size_change
 xml m3_split_button_inner_corner_size_state_list
 xml m3expressive_button_shape_state_list
 xml m3expressive_connected_buttons_inner_corner_size_state_list
+xml network_security_config

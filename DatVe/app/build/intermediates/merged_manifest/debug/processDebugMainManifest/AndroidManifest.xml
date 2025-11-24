@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="26"
         android:targetSdkVersion="36" />
+    <!-- Bỏ xmlns:app không cần thiết -->
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -30,22 +31,57 @@
         android:testOnly="true"
         android:theme="@style/Theme.DatVe"
         android:usesCleartextTraffic="true" >
+
+        <!--
+            === SỬA LỖI TẠI ĐÂY (1) ===
+            Áp dụng theme NoActionBar cho MainActivity
+        -->
         <activity
             android:name="com.example.datve.MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.DatVe.NoActionBar"
             android:usesCleartextTraffic="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="vnpay-return"
+                    android:scheme="datveapp" />
+            </intent-filter>
         </activity>
         <activity android:name="com.example.datve.LoginActivity" />
         <activity android:name="com.example.datve.RegisterActivity" />
-        <activity android:name="com.example.datve.seat.SeatSelectionActivity" />
-        <activity android:name="com.example.datve.food.FoodSelectionActivity" />
-        <activity android:name="com.example.datve.showtime.SelectShowtimeActivity" />
-        <activity android:name="com.example.datve.user.ChangePasswordActivity" />
+
+        <!--
+            === SỬA LỖI TẠI ĐÂY (2) ===
+            Áp dụng theme NoActionBar cho các Activity có Toolbar khác
+        -->
+        <activity
+            android:name="com.example.datve.seat.SeatSelectionActivity"
+            android:theme="@style/Theme.DatVe.NoActionBar" />
+        <activity
+            android:name="com.example.datve.food.FoodSelectionActivity"
+            android:theme="@style/Theme.DatVe.NoActionBar" />
+        <activity
+            android:name="com.example.datve.showtime.SelectShowtimeActivity"
+            android:theme="@style/Theme.DatVe.NoActionBar" />
+        <activity
+            android:name="com.example.datve.user.ChangePasswordActivity"
+            android:theme="@style/Theme.DatVe.NoActionBar" />
+
+        <!-- Khai báo cho VNPayPaymentActivity đã đúng -->
+        <activity
+            android:name="com.example.datve.payment.VNPayPaymentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DatVe.NoActionBar" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

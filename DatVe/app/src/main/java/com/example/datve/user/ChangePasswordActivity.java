@@ -73,10 +73,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         JSONObject requestBody = new JSONObject();
         try {
-            // Server của bạn có thể cần cả mật khẩu cũ và mới
-            // Hãy kiểm tra lại yêu cầu của API. Ở đây tôi giả định server cần cả hai.
-            // Nếu chỉ cần mật khẩu mới, hãy xóa dòng "currentPassword".
-            requestBody.put("currentPassword", currentPass);
             requestBody.put("password", newPass);
         } catch (JSONException e) {
             e.printStackTrace();

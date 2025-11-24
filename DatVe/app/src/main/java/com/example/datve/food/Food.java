@@ -15,7 +15,7 @@ public class Food {
     private String image;
     private List<PathItem> pathItems;
     private int quantity;
-
+    //
     public Food(JSONObject jsonObject) throws JSONException {
         this.id = jsonObject.getString("_id");
         this.name = jsonObject.getString("name");

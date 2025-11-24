@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.datve.MainActivity;
 import com.example.datve.R;
+import com.example.datve.payment.VNPayPaymentActivity;
 import com.example.datve.user.SessionManager;
 import com.example.datve.voucher.Voucher;
 import com.example.datve.voucher.VoucherSelectionBottomSheet;
@@ -36,15 +39,13 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class FoodSelectionActivity extends AppCompatActivity implements
         FoodAdapter.OnQuantityChangedListener, VoucherSelectionBottomSheet.VoucherSelectionListener {
 
-    // ... (Các hằng số và khai báo biến giữ nguyên) ...
+    // Constants
     public static final String EXTRA_SELECTED_SEATS = "SELECTED_SEATS";
     public static final String EXTRA_TOTAL_SEAT_PRICE = "TOTAL_SEAT_PRICE";
     public static final String EXTRA_SHOWTIME_ID = "SHOWTIME_ID";
@@ -52,6 +53,9 @@ public class FoodSelectionActivity extends AppCompatActivity implements
     public static final String EXTRA_START_TIME = "START_TIME";
     public static final String EXTRA_MOVIE_TITLE = "MOVIE_TITLE";
 
+    private static final int VNPAY_PAYMENT_REQUEST = 1001;
+
+    // Data from previous screen
     private List<String> selectedSeats;
     private int totalSeatPrice;
     private String showtimeId, selectedDate, startTime, movieTitle;
@@ -68,6 +72,11 @@ public class FoodSelectionActivity extends AppCompatActivity implements
     private RelativeLayout layoutAppliedVoucher;
     private ImageView ivRemoveVoucher;
 
+    // Payment Method UI Views
+    private RadioGroup radioGroupPayment;
+    private RadioButton radioVNPay, radioCash;
+    private MaterialCardView cardPaymentMethod;
+
     // Data
     private List<Food> foods = new ArrayList<>();
     private FoodAdapter foodAdapter;
@@ -83,7 +92,6 @@ public class FoodSelectionActivity extends AppCompatActivity implements
     private static final String FOOD_BASE_URL = "http://10.0.2.2:8080/foods";
     private static final String RESERVATION_URL = "http://10.0.2.2:8080/reservations";
     private static final String VOUCHER_BASE_URL = "http://10.0.2.2:8080/api/v1/users/";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +116,9 @@ public class FoodSelectionActivity extends AppCompatActivity implements
         showtimeId = getIntent().getStringExtra(EXTRA_SHOWTIME_ID);
         selectedDate = getIntent().getStringExtra(EXTRA_SELECTED_DATE);
         startTime = getIntent().getStringExtra(EXTRA_START_TIME);
+        movieTitle = getIntent().getStringExtra(EXTRA_MOVIE_TITLE);
 
-        // Sửa lỗi: Thêm kiểm tra movieTitle
-        if (selectedSeats == null || selectedSeats.isEmpty() || showtimeId == null || selectedDate == null ) {
+        if (selectedSeats == null || selectedSeats.isEmpty() || showtimeId == null || selectedDate == null) {
             Toast.makeText(this, "Lỗi: Thiếu thông tin đặt vé.", Toast.LENGTH_SHORT).show();
             finish();
             return false;
@@ -145,11 +153,17 @@ public class FoodSelectionActivity extends AppCompatActivity implements
         tvAppliedVoucherName = findViewById(R.id.tv_applied_voucher_name);
         ivRemoveVoucher = findViewById(R.id.iv_remove_voucher);
 
+        // === THÊM MỚI: Ánh xạ views cho phương thức thanh toán ===
+        cardPaymentMethod = findViewById(R.id.card_payment_method);
+        radioGroupPayment = findViewById(R.id.radio_group_payment);
+        radioVNPay = findViewById(R.id.radio_vnpay);
+        radioCash = findViewById(R.id.radio_cash);
+
         tvSelectedSeats.setText("Ghế: " + String.join(", ", selectedSeats));
         updateLoginStatus();
         updatePrices();
 
-        btnContinue.setOnClickListener(v -> createReservationWithUserInfo());
+        btnContinue.setOnClickListener(v -> processPayment());
         tvSelectVoucher.setOnClickListener(v -> showVoucherSelectionDialog());
         ivRemoveVoucher.setOnClickListener(v -> removeVoucher());
 
@@ -157,8 +171,6 @@ public class FoodSelectionActivity extends AppCompatActivity implements
         recyclerViewFoods.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFoods.setAdapter(foodAdapter);
     }
-
-    // ... (Các hàm fetchFoods, fetchVouchers, showVoucherSelectionDialog, onVoucherSelected, removeVoucher giữ nguyên) ...
 
     private void fetchFoods() {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -174,9 +186,7 @@ public class FoodSelectionActivity extends AppCompatActivity implements
                         Toast.makeText(this, "Lỗi xử lý dữ liệu đồ ăn", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> {
-                    Toast.makeText(this, "Không thể tải danh sách đồ ăn", Toast.LENGTH_SHORT).show();
-                });
+                error -> Toast.makeText(this, "Không thể tải danh sách đồ ăn", Toast.LENGTH_SHORT).show());
         queue.add(request);
     }
 
@@ -198,18 +208,18 @@ public class FoodSelectionActivity extends AppCompatActivity implements
                         Log.e("Voucher", "Error parsing vouchers", e);
                     }
                 },
-                error -> Log.e("Voucher", "Error fetching vouchers", error)
-        );
+                error -> Log.e("Voucher", "Error fetching vouchers", error));
         Volley.newRequestQueue(this).add(request);
     }
 
     private void showVoucherSelectionDialog() {
-        if (availableVouchers.isEmpty()){
+        if (availableVouchers.isEmpty()) {
             Toast.makeText(this, "Bạn không có voucher nào.", Toast.LENGTH_SHORT).show();
             return;
         }
         int currentTotal = totalSeatPrice + totalFoodPrice;
-        VoucherSelectionBottomSheet bottomSheet = VoucherSelectionBottomSheet.newInstance(new ArrayList<>(availableVouchers), currentTotal);
+        VoucherSelectionBottomSheet bottomSheet = VoucherSelectionBottomSheet.newInstance(
+                new ArrayList<>(availableVouchers), currentTotal);
         bottomSheet.show(getSupportFragmentManager(), "VoucherBottomSheet");
     }
 
@@ -267,11 +277,13 @@ public class FoodSelectionActivity extends AppCompatActivity implements
         updatePrices();
     }
 
-    private void createReservationWithUserInfo() {
+    // === THAY ĐỔI CHÍNH: Xử lý thanh toán ===
+    private void processPayment() {
         if (!sessionManager.isLoggedIn()) {
-            showUserInfoDialog();
+            Toast.makeText(this, "Vui lòng đăng nhập để tiếp tục", Toast.LENGTH_SHORT).show();
             return;
         }
+
         String username = sessionManager.getUserUsername();
         String phone = sessionManager.getUserPhone();
 
@@ -279,10 +291,25 @@ public class FoodSelectionActivity extends AppCompatActivity implements
             Toast.makeText(this, "Thông tin người dùng không đầy đủ.", Toast.LENGTH_SHORT).show();
             return;
         }
-        createReservation(username, phone);
+
+        // Kiểm tra phương thức thanh toán
+        int selectedPaymentId = radioGroupPayment.getCheckedRadioButtonId();
+        String paymentMethod;
+
+        if (selectedPaymentId == R.id.radio_vnpay) {
+            paymentMethod = "VNPAY";
+        } else if (selectedPaymentId == R.id.radio_cash) {
+            paymentMethod = "CASH";
+        } else {
+            Toast.makeText(this, "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo reservation với phương thức thanh toán
+        createReservation(username, phone, paymentMethod);
     }
 
-    private void createReservation(String username, String phone) {
+    private void createReservation(String username, String phone, String paymentMethod) {
         RequestQueue queue = Volley.newRequestQueue(this);
         try {
             JSONObject requestBody = new JSONObject();
@@ -295,16 +322,16 @@ public class FoodSelectionActivity extends AppCompatActivity implements
             requestBody.put("username", username);
             requestBody.put("phone", phone);
 
-            // === THAY ĐỔI THEO YÊU CẦU ===
-            // Chỉ thêm `userId` và `voucherId` nếu có voucher được áp dụng thành công
+            // === THÊM PHƯƠNG THỨC THANH TOÁN ===
+            requestBody.put("paymentMethod", paymentMethod);
+
+            // Chỉ thêm userId và voucherId nếu có voucher
             if (selectedVoucher != null && discountAmount > 0) {
                 requestBody.put("voucherId", selectedVoucher.getId());
-                // Chỉ gửi userId khi có voucher được chọn
                 if (sessionManager.isLoggedIn() && sessionManager.getUserId() != null) {
                     requestBody.put("userId", sessionManager.getUserId());
                 }
             }
-            // Nếu không có voucher, 'userId' sẽ không được gửi đi
 
             int finalTotal = totalSeatPrice + totalFoodPrice - discountAmount;
             requestBody.put("total", finalTotal);
@@ -314,7 +341,7 @@ public class FoodSelectionActivity extends AppCompatActivity implements
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, RESERVATION_URL, requestBody,
                     response -> {
                         Log.d("Reservation", "Success: " + response.toString());
-                        showSuccessDialog(username, phone);
+                        handleReservationSuccess(response, paymentMethod, username, phone);
                     },
                     error -> {
                         Log.e("Reservation", "Error: " + error.toString());
@@ -324,6 +351,65 @@ public class FoodSelectionActivity extends AppCompatActivity implements
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Lỗi tạo dữ liệu đặt vé", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // === THÊM MỚI: Xử lý kết quả tạo reservation ===
+    private void handleReservationSuccess(JSONObject response, String paymentMethod,
+                                          String username, String phone) {
+        try {
+            String reservationId = null;
+            String paymentStatus = response.optString("paymentStatus", "");
+
+            // Lấy reservationId từ response
+            if (response.has("reservation")) {
+                JSONObject reservation = response.getJSONObject("reservation");
+                reservationId = reservation.optString("id", null);
+            }
+
+            if ("VNPAY".equals(paymentMethod) && "PENDING".equals(paymentStatus)) {
+                // Chuyển sang màn hình thanh toán VNPay
+                if (reservationId != null) {
+                    Intent intent = new Intent(this, VNPayPaymentActivity.class);
+                    intent.putExtra("reservationId", reservationId);
+                    startActivityForResult(intent, VNPAY_PAYMENT_REQUEST);
+                } else {
+                    Toast.makeText(this, "Lỗi: Không nhận được mã đặt vé", Toast.LENGTH_SHORT).show();
+                }
+            } else if ("CASH".equals(paymentMethod) && "COMPLETED".equals(paymentStatus)) {
+                // Thanh toán tiền mặt -> Hiển thị thành công ngay
+                showSuccessDialog(username, phone);
+            } else {
+                Toast.makeText(this, "Trạng thái thanh toán không xác định", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Log.e("Reservation", "Error parsing response", e);
+            Toast.makeText(this, "Lỗi xử lý phản hồi từ server", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // === THÊM MỚI: Nhận kết quả từ VNPayPaymentActivity ===
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VNPAY_PAYMENT_REQUEST) {
+            if (resultCode == RESULT_OK && data != null) {
+                boolean success = data.getBooleanExtra("success", false);
+
+                if (success) {
+                    Toast.makeText(this, "Thanh toán thành công!", Toast.LENGTH_LONG).show();
+                    // Hiển thị dialog thành công
+                    String username = sessionManager.getUserUsername();
+                    String phone = sessionManager.getUserPhone();
+                    showSuccessDialog(username, phone);
+                } else {
+                    Toast.makeText(this, "Thanh toán thất bại. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // User hủy thanh toán
+                Toast.makeText(this, "Thanh toán bị hủy", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -396,21 +482,17 @@ public class FoodSelectionActivity extends AppCompatActivity implements
             String displayInfo = sessionManager.getDisplayInfo();
             if (sessionManager.isUserFullInfoLoaded()) {
                 tvLoginStatus.setText("Đặt vé với: " + displayInfo);
-                btnContinue.setText("Đặt vé");
+                btnContinue.setText("Xác nhận thanh toán");
             } else {
                 String username = sessionManager.getUserUsername();
                 tvLoginStatus.setText(username != null ? "Đang tải thông tin... (" + username + ")" : "Đang tải thông tin...");
-                btnContinue.setText("Đặt vé");
+                btnContinue.setText("Xác nhận thanh toán");
             }
         } else {
-            tvLoginStatus.setText("Bạn đang đặt vé với tư cách khách");
-            btnContinue.setText("Đặt vé");
+            tvLoginStatus.setText("Vui lòng đăng nhập để tiếp tục");
+            btnContinue.setText("Đăng nhập");
         }
         cardLoginStatus.setVisibility(View.VISIBLE);
-    }
-
-    private void showUserInfoDialog() {
-        Toast.makeText(this, "Vui lòng đăng nhập để tiếp tục", Toast.LENGTH_SHORT).show();
     }
 
     private void handleReservationError(com.android.volley.VolleyError error) {
