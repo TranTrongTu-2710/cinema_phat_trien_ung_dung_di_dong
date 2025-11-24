@@ -1,0 +1,32 @@
+spring:
+  data:
+    mongodb:
+      uri: "mongodb+srv://tutaiban123:tutaiban123@cluster0.kdw4kty.mongodb.net/?appName=Cluster0"
+      database: cinema   # đúng tên DB bạn đang dùng trên Atlas
+      auto-index-creation: true
+    jackson:
+      time-zone: Asia/Bangkok
+server:
+  port: 8080
+
+vnpay:
+  # URL môi trường TEST của VNPay
+  url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+
+  # URL trả về sau khi thanh toán (frontend của bạn)
+  returnUrl: ${VNPAY_RETURN_URL:http://localhost:3000/payment/vnpay-return}
+
+  # URL nhận thông báo IPN từ VNPay (backend của bạn)
+  notifyUrl: ${VNPAY_NOTIFY_URL:http://localhost:8080/reservations}
+
+  # Thông tin từ VNPay cung cấp (đăng ký tại https://sandbox.vnpayment.vn)
+  tmnCode: ${VNPAY_TMN_CODE:RNYTKXZE}  # Terminal Code
+  hashSecret: ${VNPAY_HASH_SECRET:AXH4NXI2OAKDBGOR2UMPFKM5Z8OAVZU3}  # Secret Key
+
+  # API Version
+  version: 2.1.0
+  command: pay
+  orderType: other
+jwt:
+  secret: 93afe47f383323cbbb029ae356f92727
+  expires-in: 2592000   # 30 ngày (giây)
